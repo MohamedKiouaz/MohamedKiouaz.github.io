@@ -1,0 +1,342 @@
+[
+    {
+        "id": 1,
+        "name": "Wood",
+        "baseProduction": true,
+        "cost": 10,
+        "production": 1,
+        "factories": 0,
+        "sellPrice": 0.1,
+        "emoji": "🌲"
+    },
+    {
+        "id": 2,
+        "name": "Stone",
+        "baseProduction": true,
+        "cost": 15,
+        "production": 1,
+        "factories": 0,
+        "sellPrice": 0.1,
+        "emoji": "🪨"
+    },
+    {
+        "id": 3,
+        "name": "Iron Ore",
+        "baseProduction": true,
+        "cost": 25,
+        "production": 1,
+        "factories": 0,
+        "sellPrice": 0.2,
+        "emoji": "⛏️"
+    },
+    {
+        "id": 4,
+        "name": "Coal",
+        "baseProduction": true,
+        "cost": 20,
+        "production": 1,
+        "factories": 0,
+        "sellPrice": 0.2,
+        "emoji": "🪵"
+    },
+    {
+        "id": 5,
+        "name": "Iron Ingot",
+        "baseProduction": false,
+        "cost": 50,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 1,
+        "emoji": "🔩",
+        "inputs": [
+            {
+                "goodId": 3,
+                "quantity": 2
+            },
+            {
+                "goodId": 4,
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "name": "Steel",
+        "baseProduction": false,
+        "cost": 100,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 2,
+        "emoji": "⚙️",
+        "inputs": [
+            {
+                "goodId": 5,
+                "quantity": 2
+            },
+            {
+                "goodId": 4,
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "name": "Tools",
+        "baseProduction": false,
+        "cost": 150,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 5,
+        "emoji": "🛠️",
+        "inputs": [
+            {
+                "goodId": 6,
+                "quantity": 1
+            },
+            {
+                "goodId": 1,
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "name": "Machines",
+        "baseProduction": false,
+        "cost": 300,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 10,
+        "emoji": "🤖",
+        "inputs": [
+            {
+                "goodId": 7,
+                "quantity": 2
+            },
+            {
+                "goodId": 6,
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "name": "Electronics",
+        "baseProduction": false,
+        "cost": 500,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 15,
+        "emoji": "📱",
+        "inputs": [
+            {
+                "goodId": 8,
+                "quantity": 1
+            },
+            {
+                "goodId": 5,
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "name": "Cars",
+        "baseProduction": false,
+        "cost": 1000,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 25,
+        "emoji": "🚗",
+        "inputs": [
+            {
+                "goodId": 6,
+                "quantity": 5
+            },
+            {
+                "goodId": 8,
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "name": "Computers",
+        "baseProduction": false,
+        "cost": 1500,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 30,
+        "emoji": "💻",
+        "inputs": [
+            {
+                "goodId": 9,
+                "quantity": 3
+            },
+            {
+                "goodId": 7,
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "name": "Smartphones",
+        "baseProduction": false,
+        "cost": 2000,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 35,
+        "emoji": "📲",
+        "inputs": [
+            {
+                "goodId": 9,
+                "quantity": 2
+            },
+            {
+                "goodId": 11,
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "name": "Robots",
+        "baseProduction": false,
+        "cost": 2500,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 40,
+        "emoji": "🤖",
+        "inputs": [
+            {
+                "goodId": 8,
+                "quantity": 5
+            },
+            {
+                "goodId": 11,
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "name": "Factories",
+        "baseProduction": false,
+        "cost": 3000,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 50,
+        "emoji": "🏭",
+        "inputs": [
+            {
+                "goodId": 13,
+                "quantity": 1
+            },
+            {
+                "goodId": 1,
+                "quantity": 10
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "name": "Energy",
+        "baseProduction": true,
+        "cost": 50,
+        "production": 1,
+        "factories": 0,
+        "sellPrice": 0.3,
+        "emoji": "⚡"
+    },
+    {
+        "id": 16,
+        "name": "Plastic",
+        "baseProduction": false,
+        "cost": 400,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 5,
+        "emoji": "🔋",
+        "inputs": [
+            {
+                "goodId": 15,
+                "quantity": 2
+            },
+            {
+                "goodId": 4,
+                "quantity": 3
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "name": "Chemicals",
+        "baseProduction": false,
+        "cost": 500,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 8,
+        "emoji": "⚗️",
+        "inputs": [
+            {
+                "goodId": 15,
+                "quantity": 2
+            },
+            {
+                "goodId": 16,
+                "quantity": 1
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "name": "Medicine",
+        "baseProduction": false,
+        "cost": 1000,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 20,
+        "emoji": "💊",
+        "inputs": [
+            {
+                "goodId": 17,
+                "quantity": 2
+            },
+            {
+                "goodId": 16,
+                "quantity": 2
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "name": "Food",
+        "baseProduction": true,
+        "cost": 20,
+        "production": 1,
+        "factories": 0,
+        "sellPrice": 0.5,
+        "emoji": "🌽"
+    },
+    {
+        "id": 20,
+        "name": "Processed Food",
+        "baseProduction": false,
+        "cost": 200,
+        "production": 0,
+        "factories": 0,
+        "sellPrice": 3,
+        "emoji": "🍔",
+        "inputs": [
+            {
+                "goodId": 19,
+                "quantity": 5
+            },
+            {
+                "goodId": 7,
+                "quantity": 1
+            }
+        ]
+    }
+]
