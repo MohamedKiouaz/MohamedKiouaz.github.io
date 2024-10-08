@@ -58,9 +58,9 @@ function initializeResourceDisplay() {
         quantitySpan.appendChild(quantityValue);
         resourceItem.appendChild(quantitySpan);
 
-        // Add Sell Button
+        // Add Sell Button with Sell Price
         const sellButton = document.createElement('button');
-        sellButton.textContent = 'Sell';
+        sellButton.textContent = `Sell ($${good.sellPrice} each)`;
         sellButton.className = 'sell-button';
         sellButton.disabled = Math.floor(resources[good.id]) === 0;
         sellButton.addEventListener('click', () => {
@@ -73,7 +73,16 @@ function initializeResourceDisplay() {
         // Store references for updates
         good.quantityValue = quantityValue;
         good.sellButton = sellButton;
+
+        createGoodElement(good, resourceItem);
     });
+
+    // Add Sell All Button
+    const sellAllButton = document.createElement('button');
+    sellAllButton.textContent = 'Sell All Goods';
+    sellAllButton.className = 'sell-button';
+    sellAllButton.addEventListener('click', sellAllGoods);
+    resourceList.appendChild(sellAllButton);
 }
 
 function updateResourceDisplay() {
@@ -99,10 +108,13 @@ function sellGood(goodId) {
     }
 }
 
-function createGoodElement(good) {
-    const div = document.createElement('div');
-    div.className = 'good';
+function sellAllGoods() {
+    goods.forEach(good => {
+        sellGood(good.id);
+    });
+}
 
+function createGoodElement(good, div) {
     // Add emoji
     if (good.emoji) {
         const emojiSpan = document.createElement('div');
@@ -111,18 +123,8 @@ function createGoodElement(good) {
         div.appendChild(emojiSpan);
     }
 
-    const h2 = document.createElement('h2');
-    h2.textContent = good.name;
-    div.appendChild(h2);
-
-    const pFactories = document.createElement('p');
-    pFactories.textContent = `Factories Owned: ${good.factories}`;
-    div.appendChild(pFactories);
-
     const pProduction = document.createElement('p');
-    pProduction.textContent = good.baseProduction
-        ? `Produces ${good.production} ${good.name} per second`
-        : `Produces ${good.name} using inputs`;
+    pProduction.textContent = `Max production: +${good.production} ${good.emoji}/sec`;
     div.appendChild(pProduction);
 
     // Display required inputs
@@ -131,7 +133,7 @@ function createGoodElement(good) {
         const inputList = good.inputs
             .map(input => {
                 const inputGood = goods.find(g => g.id === input.goodId);
-                return `${input.quantity} ${inputGood.name}`;
+                return `${input.quantity} ${inputGood.emoji}`;
             })
             .join(', ');
         pInputs.textContent = `Requires: ${inputList}`;
@@ -144,17 +146,16 @@ function createGoodElement(good) {
 
     const button = document.createElement('button');
     button.className = 'buy-button';
-    button.textContent = 'Buy Factory';
+    button.textContent = `Buy Factory (${good.factories} owned)`;
 
     // Store references for later updates
     good.button = button;
-    good.pFactories = pFactories;
 
     // Update button state based on available money
     function updateButtonState() {
         if (money >= good.cost) {
             button.disabled = false;
-            button.textContent = 'Buy Factory';
+            button.textContent = `Buy Factory (${good.factories} owned)`;
         } else {
             button.disabled = true;
             button.textContent = 'Not enough money';
@@ -165,7 +166,6 @@ function createGoodElement(good) {
         if (money >= good.cost) {
             money -= good.cost;
             good.factories += 1;
-            good.pFactories.textContent = `Factories Owned: ${good.factories}`;
             updateResourceDisplay();
             updateButtonStates();
         }
@@ -177,12 +177,11 @@ function createGoodElement(good) {
     return div;
 }
 
-
 function updateGoodsDisplay() {
     goodsContainer.innerHTML = '';
     goods.forEach(good => {
-        const goodElement = createGoodElement(good);
-        goodsContainer.appendChild(goodElement);
+        good.button.textContent = `Buy Factory (${good.factories} owned)`;
+        good.button.disabled = good.cost > money;
     });
 }
 
@@ -191,7 +190,7 @@ function updateButtonStates() {
         if (good.button) {
             if (money >= good.cost) {
                 good.button.disabled = false;
-                good.button.textContent = 'Buy Factory';
+                good.button.textContent = `Buy Factory (${good.factories} owned)`;
             } else {
                 good.button.disabled = true;
                 good.button.textContent = 'Not enough money';
@@ -235,13 +234,6 @@ function gameLoop() {
     produceGoods();
     updateResourceDisplay();
     updateButtonStates();
-
-    // Update factories owned display
-    goods.forEach(good => {
-        if (good.pFactories) {
-            good.pFactories.textContent = `Factories Owned: ${good.factories}`;
-        }
-    });
 
     requestAnimationFrame(gameLoop);
 }
