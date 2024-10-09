@@ -1,7 +1,7 @@
 
 let goods = [];
 let resources = {};
-let money = 1000;
+let money = 100;
 
 const resourceList = document.getElementById('resource-list');
 const goodsContainer = document.getElementById('goods-container');
