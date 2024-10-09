@@ -1,8 +1,7 @@
-// game.js
 
 let goods = [];
 let resources = {};
-let money = 100;
+let money = 1000;
 
 const resourceList = document.getElementById('resource-list');
 const goodsContainer = document.getElementById('goods-container');
@@ -66,6 +65,13 @@ function initializeResourceDisplay() {
         const resourceItem = document.createElement('div');
         resourceItem.className = 'resource-item';
 
+        // Hide div by default if not baseProduction
+        if (!good.baseProduction) {
+            resourceItem.style.display = 'none';
+        }
+
+        good.resourceDiv = resourceItem;
+
         // Create a heading for the resource
         // Add emoji
         if (good.emoji) {
@@ -120,38 +126,32 @@ function initializeResourceDisplay() {
             resourceItem.appendChild(pInputs);
         }
 
-        const button = document.createElement('button');
-        button.className = 'buy-button';
-        button.textContent = `Buy Factory (${good.factories} owned)`;
+        const buy_button = document.createElement('button');
+        buy_button.className = 'buy-button';
+        buy_button.textContent = `Buy Factory (${good.factories} owned)`;
 
         // Store references for later updates
-        good.button = button;
+        good.button = buy_button;
         good.pProduction = pProduction;
 
         // Update button state based on available money
         function updateButtonState() {
-            if (money >= good.cost) {
-                button.disabled = false;
-                button.textContent = `Buy Factory (${good.factories} owned)`;
-            } else {
-                button.disabled = true;
-                button.textContent = 'Not enough money';
-            }
-
             good.pProduction.textContent = `Max production: +${good.production * good.factories} ${good.emoji}/sec`;
         }
 
-        button.addEventListener('click', () => {
-            if (money >= good.cost) {
-                money -= good.cost;
-                good.factories += 1;
+        buy_button.addEventListener('click', () => {
+            number = Math.max(1, Math.floor(money * .05 / good.cost));
+
+            if (money >= good.cost * number) {
+                money -= good.cost * number;
+                good.factories += number;
                 updateResourceDisplay();
                 updateButtonStates();
             }
         });
 
         updateButtonState();
-        resourceItem.appendChild(button);
+        resourceItem.appendChild(buy_button);
     });
 }
 
@@ -159,16 +159,34 @@ function updateResourceDisplay() {
     // Update money display
     window.moneyDisplay.textContent = `$${money.toFixed(2)}`;
 
-    // Update resource quantities and sell button states
     goods.forEach(good => {
+        // Update resource quantities and sell button states
+        if (good.resourceDiv.style.display === 'none' && money >= good.cost) {
+            // Check if the good can be produced using the inputs
+            let canProduce = true;
+            if (!good.baseProduction) {
+                good.inputs.forEach(input => {
+                    if (resources[input.goodId] < input.quantity) {
+                        canProduce = false;
+                    }
+                });
+            }
+            if (canProduce) {
+                good.resourceDiv.style.display = 'block';
+            }
+        }
+
+        if (good.resourceDiv.style.display === 'none') {
+            return;
+        }
+
         good.quantityValue.textContent = `${Math.floor(resources[good.id])}`;
         good.sellButton.disabled = Math.floor(resources[good.id]) === 0;
-        good.button.textContent = `Buy Factory (${good.factories} owned)`;
-        good.button.disabled = good.cost > money;
         good.pProduction.textContent = `Max production: +${good.production * good.factories} ${good.emoji}/sec`;
         good.pProduction.title = `Number of factories: ${good.factories}`;
     });
 }
+
 
 function sellGood(goodId) {
     const quantity = Math.floor(resources[goodId]);
@@ -208,19 +226,32 @@ function produceGoods() {
             if (good.baseProduction) {
                 resources[good.id] += good.production * good.factories * deltaTime;
             } else {
-                // Check if inputs are available
-                let canProduce = true;
+                let table = {};
+
+                // create a table with the number of goods we can produce based on the inputs
                 good.inputs.forEach(input => {
-                    if (resources[input.goodId] < input.quantity * good.factories * deltaTime) {
-                        canProduce = false;
+                    if (resources[input.goodId] <= 0) {
+                        table[input.goodId] = 0;
+                    }
+                    else {
+
+                        table[input.goodId] = Math.floor(resources[input.goodId] / input.quantity);
                     }
                 });
-                if (canProduce) {
-                    good.inputs.forEach(input => {
-                        resources[input.goodId] -= input.quantity * good.factories * deltaTime;
-                    });
-                    resources[good.id] += good.factories * deltaTime;
+
+                // find the minimum value in the table
+                let maxProductionAllowedByRessources = Math.min(...Object.values(table));
+
+                let enabledFactories = Math.min(good.factories, maxProductionAllowedByRessources);
+
+                if (enabledFactories === 0) {
+                    return;
                 }
+
+                good.inputs.forEach(input => {
+                    resources[input.goodId] -= input.quantity * enabledFactories * deltaTime;
+                });
+                resources[good.id] += enabledFactories * good.production * deltaTime;
             }
         }
     });
